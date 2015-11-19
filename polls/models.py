@@ -1,17 +1,27 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils import timezone
+import datetime
 
-class Questions(models.Model):
-	"""docstring for Questions"""
+class Question(models.Model):
+	"""docstring for Question"""
 	question_text = models.CharField(max_length=200)
 	pub_date = models.DateTimeField('date published')
+
+	def __unicode__(self):
+		return self.question_text
+
+	def was_published_recently(self):
+		return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 		
 
 
 class Choice(models.Model):
 	"""docstring for Choice"""
-	question = models.ForeignKey(Questions)
+	question = models.ForeignKey(Question)
 	choice_text = models.CharField(max_length=200)
 	votes  = models.IntegerField(default=0)
 		
+	def __unicode__(self):
+		return self.choice_text
